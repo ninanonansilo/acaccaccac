@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{%static 'settings.css'%}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        test();
+    });
+    </script>
+
+</head>
+
+<body bgcolor="#454545">
+<table id = "setting" align="center" class="settings">
+    <!-- 헤드부 -->
+    <thead>
+        <caption></caption>
+    </thead>
+
+    <!-- 바디부 -->
+    <tbody style="text-align: center;">
+        <!-- 읽기 -->
+        <tr style="height: 50px; text-align: center;">
+            <th>읽기 </th>
+            <td>
+              <div class="button">
+                <button style="margin-top: 0px;" class="setting-ok">설정값 확인</button>
+              </div>
+             </td>
+        </tr>
+
+        <!-- 패턴 -->
+         <tr style="height: 70px;">
+            <th>패턴 </th>
+            <td style="text-align: center;">
+              <table style="width: 320px; height: 60px; margin-left: 14px;">
+                <tr>
+                  <td style="border: none;"><input type="button" value="RED" class="RED" /></td>
+                  <td style="border: none;"><input type="button" value="GREEN" class="GREEN" /></td>
+                  <td style="border: none;"><input type="button" value="BLUE" class="BLUE" /></td>
+                </tr>
+                <tr>
+                  <td style="border: none;"><input type="button" value="WHITE" class="WHITE" /></td>
+                  <td style="border: none;"><input type="button" value="BLACK" class="BLACK" /></td>
+                  <td style="border: none;"><input type="button" value="VIDEO" class="VIDEO" /></td>
+                </tr>
+              </table>
+
+                <div>
+
+                </div>
+             </td>
+        </tr>
+
+        <!-- 밝기 -->
+        <tr style="height: 230px;">
+            <th>밝기</th>
+            <td>
+              <table style="width: 320px; margin-left: 14px;">
+                <tr>
+                  <td style="border: none;"><input type="button" value="수동" class="VIDEO" /></td>
+                  <td style="border: none;"><input type="button" value="자동(시간)" class="VIDEO" /></td>
+                  <td style="border: none;"><input type="button" value="자동(조도)" class="VIDEO" /></td>
+                </tr>
+                <tr style="height: 5px;">
+                  <td style="border: none;"></td>
+                </tr>
+<div>
+                <form method="post" action="">{% csrf_token %}
+                    <tr>
+                        <tr style="height: 5px;">
+                        <td style="border: none;">수동 밝기</td>
+                        <td style="border: none;"><input type="text" id = "input_brigtness" class="text-field" style="color: white;"></td>
+                        <td style="border: none;"><input type="button" onclick="update()" formmethod="post" id="brigtness_button" value="설정" class="VIDEO"></td>
+                    </tr>
+                    <script>
+                        function update() {
+                               var input = document.getElementById("input_brigtness").value;
+                               $.ajax({
+                            url : '{% url 'update_Brightness' %}',
+                            type : 'POST',
+                            data : input,
+                            success:function(data){
+                            },
+                            error: function(){
+                                alert('error');}
+                        });
+                            }
+                    </script>
+                </form>
+</div>
+                  <td style="border: none;"></td>
+<div>
+                <form method="post" action="">{% csrf_token %}
+                    <tr>
+                        <tr style="height: 5px;">
+                        <td style="border: none;">조도값</td>
+                        <td style="border: none;"><input type="text" id = "input_CDS_Value" class="text-field" style="color: white;"></td>
+                        <td style="border: none;"><input type="button" formmethod="post" id="CDS_Value" value="읽기" class="VIDEO"></td>
+                    </tr>
+                </form>
+</div>
+                <tr style="height: 5px;">
+                  <td style="border: none;"></td>
+                </tr>
+                <tr>
+                  <td style="border: none;"></td>
+                  <td style="border: none;">최소</td>
+                  <td style="border: none;">최대</td>
+                </tr>
+ <div>
+                <form method="post" action="">{% csrf_token %}
+                    <tr>
+                        <td style="border: none;">자동 밝기</td>
+                        <td style="border: none;"><input type="text" id = "min_brigtness"  class="text-field" style="color: white;"></td>
+                        <td style="border: none;"><input type="text" id = "max_brigtness"  class="text-field" style="color: white;"></td>
+                    </tr>
+
+                <tr>
+                  <td style="border: none;">조도값</td>
+                  <td style="border: none;"><input type="text" id = "min_CDS" class="text-field" style="color: white;"></td>
+                  <td style="border: none;"><input type="text" id = "max_CDS" class="text-field" style="color: white;"></td>
+                </tr>
+                <tr>
+                  <td style="border: none;"></td>
+                  <td style="border: none;"></td>
+                  <td style="border: none;"><input type="button" formmethod="post" onclick="update_min_max()" id="min_max" value="설정" class="VIDEO" /></td>
+                    <script>
+                        function update_min_max() {
+                               let min_br = document.getElementById("min_brigtness").value;
+                               let max_br = document.getElementById("max_brigtness").value;
+                               let min_CDS = document.getElementById("min_CDS").value;
+                               let max_CDS = document.getElementById("max_CDS").value;
+
+                               let param = {'min_br' : min_br,
+                               'max_br' : max_br,
+                               'min_CDS' : min_CDS,
+                               'max_CDS' : max_CDS,}
+
+                               $.ajax({
+                            url : '{% url 'update_min_max' %}',
+                            type : 'POST',
+                            data : param,
+                            success:function(data){
+                            },
+                            error: function(){
+                                alert('error');}
+                        });
+                            }
+                    </script>
+                </tr>
+                </form>
+</div>
+              </table>
+             </td>
+        </tr>
+        <!-- 전원 -->
+<div>
+        <tr style="height: 200px;">
+            <th>전원</th>
+            <td>
+              <table style="width: 320px; margin-left: 14px;">
+                <tr>
+                  <td style="border: none;">전원 모드</td>
+                  <td style="border: none;"><input type="button" value="수동" class="VIDEO" /></td>
+                  <td style="border: none;"><input type="button" value="자동" class="VIDEO" /></td>
+                </tr>
+                <tr>
+                  <td style="border: none;"><p style="width: 100px;">수동 제어</p></td>
+                  <td style="border: none;"><input type="button" value="ON" class="VIDEO" /></td>
+                  <td style="border: none;"><input type="button" value="OFF" class="VIDEO" /></td>
+                </tr>
+                <tr style="height: 5px;">
+                  <td style="border: none;"></td>
+                </tr>
+        <form method="post" action="">{% csrf_token %}
+                <tr>
+                  <td style="border: none;"></td>
+                  <td style="border: none;">시</td>
+                  <td style="border: none;">분</td>
+                </tr>
+                <tr>
+                  <td style="border: none;">자동 ON</td>
+                  <td style="border: none;"><input type="text" id = "Auto_Power_On_hour" class="text-field" style="color: white;"></td>
+                  <td style="border: none;"><input type="text" id = "Auto_Power_On_min" class="text-field" style="color: white;"></td>
+                </tr>
+                <tr>
+                  <td style="border: none;">자동 OFF</td>
+                  <td style="border: none;"><input type="text" id = "Auto_Power_Off_hour" class="text-field" style="color: white;"></td>
+                  <td style="border: none;"><input type="text" id = "Auto_Power_Off_min" class="text-field" style="color: white;"></td>
+                </tr>
+                <tr>
+                  <td style="border: none;"></td>
+                  <td style="border: none;"></td>
+                  <td style="border: none;"><input type="button" formmethod="post" onclick="update_on_off()" id="Auto_On_Off" value="설정" class="VIDEO" /></td>
+                    <script>
+                        function update_on_off() {
+                               let on_hour = document.getElementById("Auto_Power_On_hour").value;
+                               let on_min = document.getElementById("Auto_Power_On_min").value;
+                               let off_hour = document.getElementById("Auto_Power_Off_hour").value;
+                               let off_min = document.getElementById("Auto_Power_Off_min").value;
+
+                               let param = {'on_hour' : on_hour,
+                               'on_min' : on_min,
+                               'off_hour' : off_hour,
+                               'off_min' : off_min,}
+
+                               $.ajax({
+                            url : '{% url 'update_on_off' %}',
+                            type : 'POST',
+                            data : param,
+                            success:function(data){
+                            },
+                            error: function(){
+                                alert('error');}
+                        });
+                            }
+                    </script>
+                </tr>
+        </form>
+</div>
+              </table>
+             </td>
+        </tr>
+
+        <!-- 시간-->
+         <tr style="height: 50px;">
+            <th>시간</th>
+            <td>
+              <table style="width: 320px; text-align: center;" align="center">
+                <tr>
+                  <td style="border: none;"><input type="text" class="text-field"  style="width: 200px; color: white;"></td>
+                  <td style="border: none;"><input type="button" value="시간 설정" class="VIDEO" /></td>
+                </tr>
+              </table>
+
+             </td>
+        </tr>
+    </tbody>
+
+
+</table>
+</body>
+{% endblock content %}
